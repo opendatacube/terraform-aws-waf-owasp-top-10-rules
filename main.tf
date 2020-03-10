@@ -256,7 +256,7 @@ resource "aws_wafregional_rule" "owasp_03_xss_rule" {
   metric_name = "${lower(var.service_name)}OWASP03MitigateXSS${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_xss_match_set.owasp_03_xss_set.0.id}"
+    data_id = aws_wafregional_xss_match_set.owasp_03_xss_set.0.id
     negated = "false"
     type    = "XssMatch"
   }
