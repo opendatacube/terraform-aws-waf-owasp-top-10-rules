@@ -64,3 +64,51 @@ variable "csrf_expected_size" {
   description = "The size in bytes of the CSRF token value. For example if it's a canonically formatted UUIDv4 value the expected size would be 36 bytes/ASCII characters."
   default     = "36"
 }
+
+variable "disable_xss_uri_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "disable_xss_uri_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "disable_xss_query_string_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "disable_xss_query_string_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "disable_xss_body_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "disable_xss_body_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
+
+variable "disable_xss_cookie_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter."
+}
+
+variable "disable_xss_cookie_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter."
+}
