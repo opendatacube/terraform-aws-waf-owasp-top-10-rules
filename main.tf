@@ -1,12 +1,12 @@
 # Random ID Generator
 
 resource "random_id" "this" {
-  count = "${lower(var.target_scope) == "regional" || lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" || lower(var.target_scope) == "global" ? 1 : 0
 
   byte_length = "8"
 
   keepers = {
-    target_scope = "${lower(var.target_scope)}"
+    target_scope = lower(var.target_scope)
   }
 }
 
@@ -16,7 +16,7 @@ resource "random_id" "this" {
 ### Mitigate SQL Injection Attacks
 ### Matches attempted SQLi patterns in the URI, QUERY_STRING, BODY, COOKIES
 resource "aws_wafregional_sql_injection_match_set" "owasp_01_sql_injection_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-01-detect-sql-injection-${random_id.this.0.hex}"
 
@@ -88,15 +88,15 @@ resource "aws_wafregional_sql_injection_match_set" "owasp_01_sql_injection_set" 
 }
 
 resource "aws_wafregional_rule" "owasp_01_sql_injection_rule" {
-  depends_on = ["aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set"]
+  depends_on = [ aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set ]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-01-mitigate-sql-injection-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP01MitigateSQLInjection${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set.0.id}"
+    data_id = aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set.0.id
     negated = "false"
     type    = "SqlInjectionMatch"
   }
@@ -106,7 +106,7 @@ resource "aws_wafregional_rule" "owasp_01_sql_injection_rule" {
 ### Blacklist bad/hijacked JWT tokens or session IDs
 ### Matches the specific values in the cookie or Authorization header for JWT it is sufficient to check the signature
 resource "aws_wafregional_byte_match_set" "owasp_02_auth_token_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-02-match-auth-token-${random_id.this.0.hex}"
 
@@ -136,13 +136,13 @@ resource "aws_wafregional_byte_match_set" "owasp_02_auth_token_string_set" {
 resource "aws_wafregional_rule" "owasp_02_auth_token_rule" {
   depends_on = ["aws_wafregional_byte_match_set.owasp_02_auth_token_string_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-02-detect-bad-auth-token-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP02BadAuthToken${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_02_auth_token_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_02_auth_token_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -152,7 +152,7 @@ resource "aws_wafregional_rule" "owasp_02_auth_token_rule" {
 ### Mitigate Cross Site Scripting Attacks
 ### Matches attempted XSS patterns in the URI, QUERY_STRING, BODY, COOKIES
 resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-03-detect-xss-${random_id.this.0.hex}"
 
@@ -250,7 +250,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
 resource "aws_wafregional_rule" "owasp_03_xss_rule" {
   depends_on = ["aws_wafregional_xss_match_set.owasp_03_xss_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-03-mitigate-xss-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP03MitigateXSS${random_id.this.0.hex}"
@@ -266,7 +266,7 @@ resource "aws_wafregional_rule" "owasp_03_xss_rule" {
 ### Path Traversal, LFI, RFI
 ### Matches request patterns designed to traverse filesystem paths, and include local or remote files
 resource "aws_wafregional_byte_match_set" "owasp_04_paths_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-04-match-rfi-lfi-traversal-${random_id.this.0.hex}"
 
@@ -354,7 +354,7 @@ resource "aws_wafregional_byte_match_set" "owasp_04_paths_string_set" {
 resource "aws_wafregional_rule" "owasp_04_paths_rule" {
   depends_on = ["aws_wafregional_byte_match_set.owasp_04_paths_string_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-04-detect-rfi-lfi-traversal-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP04DetectRFILFITraversal${random_id.this.0.hex}"
@@ -376,7 +376,7 @@ resource "aws_wafregional_rule" "owasp_04_paths_rule" {
 ## PHP Specific Security Misconfigurations
 ## Matches request patterns designed to exploit insecure PHP/CGI configuration
 resource "aws_wafregional_byte_match_set" "owasp_06_php_insecure_qs_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-06-match-php-insecure-var-refs-${random_id.this.0.hex}"
 
@@ -462,7 +462,7 @@ resource "aws_wafregional_byte_match_set" "owasp_06_php_insecure_qs_string_set" 
 }
 
 resource "aws_wafregional_byte_match_set" "owasp_06_php_insecure_uri_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-06-match-php-insecure-uri-${random_id.this.0.hex}"
 
@@ -490,7 +490,7 @@ resource "aws_wafregional_byte_match_set" "owasp_06_php_insecure_uri_string_set"
 resource "aws_wafregional_rule" "owasp_06_php_insecure_rule" {
   depends_on = ["aws_wafregional_byte_match_set.owasp_06_php_insecure_qs_string_set", "aws_wafregional_byte_match_set.owasp_06_php_insecure_uri_string_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-06-detect-php-insecure-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP06DetectPHPInsecure${random_id.this.0.hex}"
@@ -512,14 +512,14 @@ resource "aws_wafregional_rule" "owasp_06_php_insecure_rule" {
 ### Mitigate abnormal requests via size restrictions
 ### Enforce consistent request hygene, limit size of key elements
 resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-07-size-restrictions-${random_id.this.0.hex}"
 
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_uri_size}"
+    size                = var.max_expected_uri_size
 
     field_to_match {
       type = "URI"
@@ -529,7 +529,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_query_string_size}"
+    size                = var.max_expected_query_string_size
 
     field_to_match {
       type = "QUERY_STRING"
@@ -539,7 +539,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_body_size}"
+    size                = var.max_expected_body_size
 
     field_to_match {
       type = "BODY"
@@ -549,7 +549,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_cookie_size}"
+    size                = var.max_expected_cookie_size
 
     field_to_match {
       type = "HEADER"
@@ -561,13 +561,13 @@ resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
 resource "aws_wafregional_rule" "owasp_07_size_restriction_rule" {
   depends_on = ["aws_wafregional_size_constraint_set.owasp_07_size_restriction_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-07-restrict-sizes-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP07RestrictSizes${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_size_constraint_set.owasp_07_size_restriction_set.0.id}"
+    data_id = aws_wafregional_size_constraint_set.owasp_07_size_restriction_set.0.id
     negated = "false"
     type    = "SizeConstraint"
   }
@@ -577,7 +577,7 @@ resource "aws_wafregional_rule" "owasp_07_size_restriction_rule" {
 ### CSRF token enforcement example
 ### Enforce the presence of CSRF token in request header
 resource "aws_wafregional_byte_match_set" "owasp_08_csrf_method_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-08-match-csrf-method-${random_id.this.0.hex}"
 
@@ -593,18 +593,18 @@ resource "aws_wafregional_byte_match_set" "owasp_08_csrf_method_string_set" {
 }
 
 resource "aws_wafregional_size_constraint_set" "owasp_08_csrf_token_size_constrain_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-08-csrf-token-size-${random_id.this.0.hex}"
 
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "EQ"
-    size                = "${var.csrf_expected_size}"
+    size                = var.csrf_expected_size
 
     field_to_match {
       type = "HEADER"
-      data = "${var.csrf_expected_header}"
+      data = var.csrf_expected_header
     }
   }
 }
@@ -612,7 +612,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_08_csrf_token_size_constra
 resource "aws_wafregional_rule" "owasp_08_csrf_rule" {
   depends_on = ["aws_wafregional_byte_match_set.owasp_08_csrf_method_string_set", "aws_wafregional_size_constraint_set.owasp_08_csrf_token_size_constrain_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-08-enforce-csrf-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP08EnforceCSRF${random_id.this.0.hex}"
@@ -624,7 +624,7 @@ resource "aws_wafregional_rule" "owasp_08_csrf_rule" {
   }
 
   predicate {
-    data_id = "${aws_wafregional_size_constraint_set.owasp_08_csrf_token_size_constrain_set.0.id}"
+    data_id = aws_wafregional_size_constraint_set.owasp_08_csrf_token_size_constrain_set.0.id
     negated = "false"
     type    = "SizeConstraint"
   }
@@ -634,7 +634,7 @@ resource "aws_wafregional_rule" "owasp_08_csrf_rule" {
 ### Server-side includes & libraries in webroot
 ### Matches request patterns for webroot objects that shouldn't be directly accessible
 resource "aws_wafregional_byte_match_set" "owasp_09_server_side_include_string_set" {
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-09-match-ssi-${random_id.this.0.hex}"
 
@@ -712,13 +712,13 @@ resource "aws_wafregional_byte_match_set" "owasp_09_server_side_include_string_s
 resource "aws_wafregional_rule" "owasp_09_server_side_include_rule" {
   depends_on = ["aws_wafregional_byte_match_set.owasp_09_server_side_include_string_set"]
 
-  count = "${lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.target_scope) == "regional" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-09-detect-ssi-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP09DetectSSI${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_09_server_side_include_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_09_server_side_include_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -743,10 +743,10 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     "aws_wafregional_rule.owasp_09_server_side_include_rule",
   ]
 
-  count = "${lower(var.create_rule_group) && lower(var.target_scope) == "regional" ? "1" : "0"}"
+  count = lower(var.create_rule_group) && lower(var.target_scope) == "regional" ? 1 : 0
 
-  name        = "${format("%s-owasp-top-10-%s", lower(var.service_name), random_id.this.0.hex)}"
-  metric_name = "${format("%sOWASPTop10%s", lower(var.service_name), random_id.this.0.hex)}"
+  name        = format("%s-owasp-top-10-%s", lower(var.service_name), random_id.this.0.hex)
+  metric_name = format("%sOWASPTop10%s", lower(var.service_name), random_id.this.0.hex)
 
   activated_rule {
     action {
@@ -754,7 +754,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "1"
-    rule_id  = "${aws_wafregional_rule.owasp_07_size_restriction_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_07_size_restriction_rule.0.id
     type     = "REGULAR"
   }
 
@@ -764,7 +764,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "2"
-    rule_id  = "${aws_wafregional_rule.owasp_02_auth_token_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_02_auth_token_rule.0.id
     type     = "REGULAR"
   }
 
@@ -774,7 +774,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "3"
-    rule_id  = "${aws_wafregional_rule.owasp_01_sql_injection_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_01_sql_injection_rule.0.id
     type     = "REGULAR"
   }
 
@@ -784,7 +784,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "4"
-    rule_id  = "${aws_wafregional_rule.owasp_03_xss_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_03_xss_rule.0.id
     type     = "REGULAR"
   }
 
@@ -794,7 +794,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "5"
-    rule_id  = "${aws_wafregional_rule.owasp_04_paths_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_04_paths_rule.0.id
     type     = "REGULAR"
   }
 
@@ -804,7 +804,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "6"
-    rule_id  = "${aws_wafregional_rule.owasp_06_php_insecure_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_06_php_insecure_rule.0.id
     type     = "REGULAR"
   }
 
@@ -814,7 +814,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "7"
-    rule_id  = "${aws_wafregional_rule.owasp_08_csrf_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_08_csrf_rule.0.id
     type     = "REGULAR"
   }
 
@@ -824,7 +824,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
     }
 
     priority = "8"
-    rule_id  = "${aws_wafregional_rule.owasp_09_server_side_include_rule.0.id}"
+    rule_id  = aws_wafregional_rule.owasp_09_server_side_include_rule.0.id
     type     = "REGULAR"
   }
 }
@@ -835,7 +835,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 ### Mitigate SQL Injection Attacks
 ### Matches attempted SQLi patterns in the URI, QUERY_STRING, BODY, COOKIES
 resource "aws_waf_sql_injection_match_set" "owasp_01_sql_injection_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-01-detect-sql-injection-${random_id.this.0.hex}"
 
@@ -909,7 +909,7 @@ resource "aws_waf_sql_injection_match_set" "owasp_01_sql_injection_set" {
 resource "aws_waf_rule" "owasp_01_sql_injection_rule" {
   depends_on = ["aws_waf_sql_injection_match_set.owasp_01_sql_injection_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-01-mitigate-sql-injection-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP01MitigateSQLInjection${random_id.this.0.hex}"
@@ -925,7 +925,7 @@ resource "aws_waf_rule" "owasp_01_sql_injection_rule" {
 ### Blacklist bad/hijacked JWT tokens or session IDs
 ### Matches the specific values in the cookie or Authorization header for JWT it is sufficient to check the signature
 resource "aws_waf_byte_match_set" "owasp_02_auth_token_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-02-match-auth-token-${random_id.this.0.hex}"
 
@@ -955,7 +955,7 @@ resource "aws_waf_byte_match_set" "owasp_02_auth_token_string_set" {
 resource "aws_waf_rule" "owasp_02_auth_token_rule" {
   depends_on = ["aws_waf_byte_match_set.owasp_02_auth_token_string_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-02-detect-bad-auth-token-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP02BadAuthToken${random_id.this.0.hex}"
@@ -971,7 +971,7 @@ resource "aws_waf_rule" "owasp_02_auth_token_rule" {
 ### Mitigate Cross Site Scripting Attacks
 ### Matches attempted XSS patterns in the URI, QUERY_STRING, BODY, COOKIES
 resource "aws_waf_xss_match_set" "owasp_03_xss_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-03-detect-xss-${random_id.this.0.hex}"
 
@@ -1045,7 +1045,7 @@ resource "aws_waf_xss_match_set" "owasp_03_xss_set" {
 resource "aws_waf_rule" "owasp_03_xss_rule" {
   depends_on = ["aws_waf_xss_match_set.owasp_03_xss_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-03-mitigate-xss-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP03MitigateXSS${random_id.this.0.hex}"
@@ -1061,7 +1061,7 @@ resource "aws_waf_rule" "owasp_03_xss_rule" {
 ### Path Traversal, LFI, RFI
 ### Matches request patterns designed to traverse filesystem paths, and include local or remote files
 resource "aws_waf_byte_match_set" "owasp_04_paths_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-04-match-rfi-lfi-traversal-${random_id.this.0.hex}"
 
@@ -1149,7 +1149,7 @@ resource "aws_waf_byte_match_set" "owasp_04_paths_string_set" {
 resource "aws_waf_rule" "owasp_04_paths_rule" {
   depends_on = ["aws_waf_byte_match_set.owasp_04_paths_string_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-04-detect-rfi-lfi-traversal-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP04DetectRFILFITraversal${random_id.this.0.hex}"
@@ -1171,7 +1171,7 @@ resource "aws_waf_rule" "owasp_04_paths_rule" {
 ## PHP Specific Security Misconfigurations
 ## Matches request patterns designed to exploit insecure PHP/CGI configuration
 resource "aws_waf_byte_match_set" "owasp_06_php_insecure_qs_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-06-match-php-insecure-var-refs-${random_id.this.0.hex}"
 
@@ -1257,7 +1257,7 @@ resource "aws_waf_byte_match_set" "owasp_06_php_insecure_qs_string_set" {
 }
 
 resource "aws_waf_byte_match_set" "owasp_06_php_insecure_uri_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-06-match-php-insecure-uri-${random_id.this.0.hex}"
 
@@ -1285,7 +1285,7 @@ resource "aws_waf_byte_match_set" "owasp_06_php_insecure_uri_string_set" {
 resource "aws_waf_rule" "owasp_06_php_insecure_rule" {
   depends_on = ["aws_waf_byte_match_set.owasp_06_php_insecure_qs_string_set", "aws_waf_byte_match_set.owasp_06_php_insecure_uri_string_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-06-detect-php-insecure-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP06DetectPHPInsecure${random_id.this.0.hex}"
@@ -1307,14 +1307,14 @@ resource "aws_waf_rule" "owasp_06_php_insecure_rule" {
 ### Mitigate abnormal requests via size restrictions
 ### Enforce consistent request hygene, limit size of key elements
 resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-07-size-restrictions-${random_id.this.0.hex}"
 
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_uri_size}"
+    size                = var.max_expected_uri_size
 
     field_to_match {
       type = "URI"
@@ -1324,7 +1324,7 @@ resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_query_string_size}"
+    size                = var.max_expected_query_string_size
 
     field_to_match {
       type = "QUERY_STRING"
@@ -1334,7 +1334,7 @@ resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_body_size}"
+    size                = var.max_expected_body_size
 
     field_to_match {
       type = "BODY"
@@ -1344,7 +1344,7 @@ resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.max_expected_cookie_size}"
+    size                = var.max_expected_cookie_size
 
     field_to_match {
       type = "HEADER"
@@ -1356,13 +1356,13 @@ resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
 resource "aws_waf_rule" "owasp_07_size_restriction_rule" {
   depends_on = ["aws_waf_size_constraint_set.owasp_07_size_restriction_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-07-restrict-sizes-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP07RestrictSizes${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_size_constraint_set.owasp_07_size_restriction_set.0.id}"
+    data_id = aws_waf_size_constraint_set.owasp_07_size_restriction_set.0.id
     negated = "false"
     type    = "SizeConstraint"
   }
@@ -1372,7 +1372,7 @@ resource "aws_waf_rule" "owasp_07_size_restriction_rule" {
 ### CSRF token enforcement example
 ### Enforce the presence of CSRF token in request header
 resource "aws_waf_byte_match_set" "owasp_08_csrf_method_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-08-match-csrf-method-${random_id.this.0.hex}"
 
@@ -1388,7 +1388,7 @@ resource "aws_waf_byte_match_set" "owasp_08_csrf_method_string_set" {
 }
 
 resource "aws_waf_size_constraint_set" "owasp_08_csrf_token_size_constrain_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-08-csrf-token-size-${random_id.this.0.hex}"
 
@@ -1407,13 +1407,13 @@ resource "aws_waf_size_constraint_set" "owasp_08_csrf_token_size_constrain_set" 
 resource "aws_waf_rule" "owasp_08_csrf_rule" {
   depends_on = ["aws_waf_byte_match_set.owasp_08_csrf_method_string_set", "aws_waf_size_constraint_set.owasp_08_csrf_token_size_constrain_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-08-enforce-csrf-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP08EnforceCSRF${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_08_csrf_method_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_08_csrf_method_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -1429,7 +1429,7 @@ resource "aws_waf_rule" "owasp_08_csrf_rule" {
 ### Server-side includes & libraries in webroot
 ### Matches request patterns for webroot objects that shouldn't be directly accessible
 resource "aws_waf_byte_match_set" "owasp_09_server_side_include_string_set" {
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name = "${lower(var.service_name)}-owasp-09-match-ssi-${random_id.this.0.hex}"
 
@@ -1507,13 +1507,13 @@ resource "aws_waf_byte_match_set" "owasp_09_server_side_include_string_set" {
 resource "aws_waf_rule" "owasp_09_server_side_include_rule" {
   depends_on = ["aws_waf_byte_match_set.owasp_09_server_side_include_string_set"]
 
-  count = "${lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-09-detect-ssi-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP09DetectSSI${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_09_server_side_include_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_09_server_side_include_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -1538,10 +1538,10 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     "aws_waf_rule.owasp_09_server_side_include_rule",
   ]
 
-  count = "${lower(var.create_rule_group) && lower(var.target_scope) == "global" ? "1" : "0"}"
+  count = lower(var.create_rule_group) && lower(var.target_scope) == "global" ? 1 : 0
 
-  name        = "${format("%s-owasp-top-10-%s", lower(var.service_name), random_id.this.0.hex)}"
-  metric_name = "${format("%sOWASPTop10%s", lower(var.service_name), random_id.this.0.hex)}"
+  name        = format("%s-owasp-top-10-%s", lower(var.service_name), random_id.this.0.hex)
+  metric_name = format("%sOWASPTop10%s", lower(var.service_name), random_id.this.0.hex)
 
   activated_rule {
     action {
@@ -1549,7 +1549,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "1"
-    rule_id  = "${aws_waf_rule.owasp_07_size_restriction_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_07_size_restriction_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1559,7 +1559,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "2"
-    rule_id  = "${aws_waf_rule.owasp_02_auth_token_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_02_auth_token_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1569,7 +1569,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "3"
-    rule_id  = "${aws_waf_rule.owasp_01_sql_injection_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_01_sql_injection_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1579,7 +1579,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "4"
-    rule_id  = "${aws_waf_rule.owasp_03_xss_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_03_xss_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1589,7 +1589,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "5"
-    rule_id  = "${aws_waf_rule.owasp_04_paths_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_04_paths_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1599,7 +1599,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "6"
-    rule_id  = "${aws_waf_rule.owasp_06_php_insecure_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_06_php_insecure_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1609,7 +1609,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "7"
-    rule_id  = "${aws_waf_rule.owasp_08_csrf_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_08_csrf_rule.0.id
     type     = "REGULAR"
   }
 
@@ -1619,7 +1619,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
     }
 
     priority = "8"
-    rule_id  = "${aws_waf_rule.owasp_09_server_side_include_rule.0.id}"
+    rule_id  = aws_waf_rule.owasp_09_server_side_include_rule.0.id
     type     = "REGULAR"
   }
 }
