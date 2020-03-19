@@ -1393,11 +1393,11 @@ resource "aws_waf_size_constraint_set" "owasp_08_csrf_token_size_constrain_set" 
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "EQ"
-    size                = "${var.csrf_expected_size}"
+    size                = var.csrf_expected_size
 
     field_to_match {
       type = "HEADER"
-      data = "${var.csrf_expected_header}"
+      data = var.csrf_expected_header
     }
   }
 }
