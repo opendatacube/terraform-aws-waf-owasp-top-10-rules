@@ -907,15 +907,13 @@ resource "aws_waf_sql_injection_match_set" "owasp_01_sql_injection_set" {
 }
 
 resource "aws_waf_rule" "owasp_01_sql_injection_rule" {
-  depends_on = ["aws_waf_sql_injection_match_set.owasp_01_sql_injection_set"]
-
   count = lower(var.target_scope) == "global" ? 1 : 0
 
   name        = "${lower(var.service_name)}-owasp-01-mitigate-sql-injection-${random_id.this.0.hex}"
   metric_name = "${lower(var.service_name)}OWASP01MitigateSQLInjection${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_sql_injection_match_set.owasp_01_sql_injection_set.0.id}"
+    data_id = aws_waf_sql_injection_match_set.owasp_01_sql_injection_set.0.id
     negated = "false"
     type    = "SqlInjectionMatch"
   }
