@@ -360,7 +360,7 @@ resource "aws_wafregional_rule" "owasp_04_paths_rule" {
   metric_name = "${lower(var.service_name)}OWASP04DetectRFILFITraversal${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_04_paths_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_04_paths_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -496,13 +496,13 @@ resource "aws_wafregional_rule" "owasp_06_php_insecure_rule" {
   metric_name = "${lower(var.service_name)}OWASP06DetectPHPInsecure${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_06_php_insecure_qs_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_06_php_insecure_qs_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_06_php_insecure_uri_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_06_php_insecure_uri_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -618,7 +618,7 @@ resource "aws_wafregional_rule" "owasp_08_csrf_rule" {
   metric_name = "${lower(var.service_name)}OWASP08EnforceCSRF${random_id.this.0.hex}"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.owasp_08_csrf_method_string_set.0.id}"
+    data_id = aws_wafregional_byte_match_set.owasp_08_csrf_method_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -959,7 +959,7 @@ resource "aws_waf_rule" "owasp_02_auth_token_rule" {
   metric_name = "${lower(var.service_name)}OWASP02BadAuthToken${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_02_auth_token_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_02_auth_token_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -1049,7 +1049,7 @@ resource "aws_waf_rule" "owasp_03_xss_rule" {
   metric_name = "${lower(var.service_name)}OWASP03MitigateXSS${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_xss_match_set.owasp_03_xss_set.0.id}"
+    data_id = aws_waf_xss_match_set.owasp_03_xss_set.0.id
     negated = "false"
     type    = "XssMatch"
   }
@@ -1153,7 +1153,7 @@ resource "aws_waf_rule" "owasp_04_paths_rule" {
   metric_name = "${lower(var.service_name)}OWASP04DetectRFILFITraversal${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_04_paths_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_04_paths_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -1289,13 +1289,13 @@ resource "aws_waf_rule" "owasp_06_php_insecure_rule" {
   metric_name = "${lower(var.service_name)}OWASP06DetectPHPInsecure${random_id.this.0.hex}"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_06_php_insecure_qs_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_06_php_insecure_qs_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.owasp_06_php_insecure_uri_string_set.0.id}"
+    data_id = aws_waf_byte_match_set.owasp_06_php_insecure_uri_string_set.0.id
     negated = "false"
     type    = "ByteMatch"
   }
@@ -1417,7 +1417,7 @@ resource "aws_waf_rule" "owasp_08_csrf_rule" {
   }
 
   predicates {
-    data_id = "${aws_waf_size_constraint_set.owasp_08_csrf_token_size_constrain_set.0.id}"
+    data_id = aws_waf_size_constraint_set.owasp_08_csrf_token_size_constrain_set.0.id
     negated = "false"
     type    = "SizeConstraint"
   }
