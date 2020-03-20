@@ -112,3 +112,51 @@ variable "disable_xss_cookie_html_decode" {
   type        = bool
   description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter."
 }
+
+variable "disable_04_uri_contains_previous_dir_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '../' after decoding as URL.' filter"
+}
+
+variable "disable_04_uri_contains_previous_dir_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '../' after decoding as HTML tags.' filter"
+}
+
+variable "disable_04_query_string_contains_previous_dir_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '../' after decoding as URL.' filter"
+}
+
+variable "disable_04_query_string_contains_previous_dir_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '../' after decoding as HTML tags.' filter"
+}
+
+variable "disable_04_uri_contains_url_path_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '://' after decoding as URL.' filter"
+}
+
+variable "disable_04_uri_contains_url_path_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'URI contains: '://' after decoding as HTML tags.' filter"
+}
+
+variable "disable_04_query_string_contains_url_path_after_url_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '://' after decoding as URL.' filter"
+}
+
+variable "disable_04_query_string_contains_url_path_after_html_decode" {
+  default     = false
+  type        = bool
+  description = "Disable the 'Query string contains: '://' after decoding as HTML tags.' filter"
+}
