@@ -65,49 +65,49 @@ variable "csrf_expected_size" {
   default     = "36"
 }
 
-variable "disable_xss_uri_url_decode" {
+variable "disable_03_uri_url_decode" {
   default     = false
   type        = bool
   description = "Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter."
 }
 
-variable "disable_xss_uri_html_decode" {
+variable "disable_03_uri_html_decode" {
   default     = false
   type        = bool
   description = "Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter."
 }
 
-variable "disable_xss_query_string_url_decode" {
+variable "disable_03_query_string_url_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter."
 }
 
-variable "disable_xss_query_string_html_decode" {
+variable "disable_03_query_string_html_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter."
 }
 
-variable "disable_xss_body_url_decode" {
+variable "disable_03_body_url_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter."
 }
 
-variable "disable_xss_body_html_decode" {
+variable "disable_03_body_html_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter."
 }
 
-variable "disable_xss_cookie_url_decode" {
+variable "disable_03_cookie_url_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter."
 }
 
-variable "disable_xss_cookie_html_decode" {
+variable "disable_03_cookie_html_decode" {
   default     = false
   type        = bool
   description = "Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter."

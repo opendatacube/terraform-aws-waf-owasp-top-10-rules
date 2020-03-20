@@ -157,7 +157,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   name = "${lower(var.service_name)}-owasp-03-detect-xss-${random_id.this.0.hex}"
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_uri_url_decode ? [] : [1]
+    for_each = var.disable_03_uri_url_decode ? [] : [1]
     content {
       text_transformation = "URL_DECODE"
 
@@ -168,7 +168,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_uri_html_decode ? [] : [1]
+    for_each = var.disable_03_uri_html_decode ? [] : [1]
     content {
       text_transformation = "HTML_ENTITY_DECODE"
 
@@ -179,7 +179,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_query_string_url_decode ? [] : [1]
+    for_each = var.disable_03_query_string_url_decode ? [] : [1]
     content {
       text_transformation = "URL_DECODE"
 
@@ -190,7 +190,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_query_string_html_decode ? [] : [1]
+    for_each = var.disable_03_query_string_html_decode ? [] : [1]
     content {
       text_transformation = "HTML_ENTITY_DECODE"
 
@@ -201,7 +201,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_body_url_decode ? [] : [1]
+    for_each = var.disable_03_body_url_decode ? [] : [1]
     content {
       text_transformation = "URL_DECODE"
 
@@ -212,7 +212,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_body_html_decode ? [] : [1]
+    for_each = var.disable_03_body_html_decode ? [] : [1]
     content {
       text_transformation = "HTML_ENTITY_DECODE"
 
@@ -223,7 +223,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_cookie_url_decode ? [] : [1]
+    for_each = var.disable_03_cookie_url_decode ? [] : [1]
     content {
       text_transformation = "URL_DECODE"
 
@@ -235,7 +235,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
   }
 
   dynamic "xss_match_tuple" {
-    for_each = var.disable_xss_cookie_html_decode ? [] : [1]
+    for_each = var.disable_03_cookie_html_decode ? [] : [1]
     content {
       text_transformation = "HTML_ENTITY_DECODE"
 
