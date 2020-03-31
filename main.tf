@@ -134,7 +134,7 @@ resource "aws_wafregional_byte_match_set" "owasp_02_auth_token_string_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_02_auth_token_rule" {
-  depends_on = ["aws_wafregional_byte_match_set.owasp_02_auth_token_string_set"]
+  depends_on = [aws_wafregional_byte_match_set.owasp_02_auth_token_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -248,7 +248,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_03_xss_rule" {
-  depends_on = ["aws_wafregional_xss_match_set.owasp_03_xss_set"]
+  depends_on = [aws_wafregional_xss_match_set.owasp_03_xss_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -352,7 +352,7 @@ resource "aws_wafregional_byte_match_set" "owasp_04_paths_string_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_04_paths_rule" {
-  depends_on = ["aws_wafregional_byte_match_set.owasp_04_paths_string_set"]
+  depends_on = [aws_wafregional_byte_match_set.owasp_04_paths_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -488,7 +488,7 @@ resource "aws_wafregional_byte_match_set" "owasp_06_php_insecure_uri_string_set"
 }
 
 resource "aws_wafregional_rule" "owasp_06_php_insecure_rule" {
-  depends_on = ["aws_wafregional_byte_match_set.owasp_06_php_insecure_qs_string_set", "aws_wafregional_byte_match_set.owasp_06_php_insecure_uri_string_set"]
+  depends_on = [aws_wafregional_byte_match_set.owasp_06_php_insecure_qs_string_set, aws_wafregional_byte_match_set.owasp_06_php_insecure_uri_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -559,7 +559,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_07_size_restriction_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_07_size_restriction_rule" {
-  depends_on = ["aws_wafregional_size_constraint_set.owasp_07_size_restriction_set"]
+  depends_on = [aws_wafregional_size_constraint_set.owasp_07_size_restriction_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -610,7 +610,7 @@ resource "aws_wafregional_size_constraint_set" "owasp_08_csrf_token_size_constra
 }
 
 resource "aws_wafregional_rule" "owasp_08_csrf_rule" {
-  depends_on = ["aws_wafregional_byte_match_set.owasp_08_csrf_method_string_set", "aws_wafregional_size_constraint_set.owasp_08_csrf_token_size_constrain_set"]
+  depends_on = [aws_wafregional_byte_match_set.owasp_08_csrf_method_string_set, aws_wafregional_size_constraint_set.owasp_08_csrf_token_size_constrain_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -710,7 +710,7 @@ resource "aws_wafregional_byte_match_set" "owasp_09_server_side_include_string_s
 }
 
 resource "aws_wafregional_rule" "owasp_09_server_side_include_rule" {
-  depends_on = ["aws_wafregional_byte_match_set.owasp_09_server_side_include_string_set"]
+  depends_on = [aws_wafregional_byte_match_set.owasp_09_server_side_include_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -951,7 +951,7 @@ resource "aws_waf_byte_match_set" "owasp_02_auth_token_string_set" {
 }
 
 resource "aws_waf_rule" "owasp_02_auth_token_rule" {
-  depends_on = ["aws_waf_byte_match_set.owasp_02_auth_token_string_set"]
+  depends_on = [aws_waf_byte_match_set.owasp_02_auth_token_string_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1041,7 +1041,7 @@ resource "aws_waf_xss_match_set" "owasp_03_xss_set" {
 }
 
 resource "aws_waf_rule" "owasp_03_xss_rule" {
-  depends_on = ["aws_waf_xss_match_set.owasp_03_xss_set"]
+  depends_on = [aws_waf_xss_match_set.owasp_03_xss_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1169,7 +1169,7 @@ resource "aws_waf_byte_match_set" "owasp_04_paths_string_set" {
 }
 
 resource "aws_waf_rule" "owasp_04_paths_rule" {
-  depends_on = ["aws_waf_byte_match_set.owasp_04_paths_string_set"]
+  depends_on = [aws_waf_byte_match_set.owasp_04_paths_string_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1305,7 +1305,7 @@ resource "aws_waf_byte_match_set" "owasp_06_php_insecure_uri_string_set" {
 }
 
 resource "aws_waf_rule" "owasp_06_php_insecure_rule" {
-  depends_on = ["aws_waf_byte_match_set.owasp_06_php_insecure_qs_string_set", "aws_waf_byte_match_set.owasp_06_php_insecure_uri_string_set"]
+  depends_on = [aws_waf_byte_match_set.owasp_06_php_insecure_qs_string_set, aws_waf_byte_match_set.owasp_06_php_insecure_uri_string_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1376,7 +1376,7 @@ resource "aws_waf_size_constraint_set" "owasp_07_size_restriction_set" {
 }
 
 resource "aws_waf_rule" "owasp_07_size_restriction_rule" {
-  depends_on = ["aws_waf_size_constraint_set.owasp_07_size_restriction_set"]
+  depends_on = [aws_waf_size_constraint_set.owasp_07_size_restriction_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1427,7 +1427,7 @@ resource "aws_waf_size_constraint_set" "owasp_08_csrf_token_size_constrain_set" 
 }
 
 resource "aws_waf_rule" "owasp_08_csrf_rule" {
-  depends_on = ["aws_waf_byte_match_set.owasp_08_csrf_method_string_set", "aws_waf_size_constraint_set.owasp_08_csrf_token_size_constrain_set"]
+  depends_on = [aws_waf_byte_match_set.owasp_08_csrf_method_string_set, aws_waf_size_constraint_set.owasp_08_csrf_token_size_constrain_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
@@ -1527,7 +1527,7 @@ resource "aws_waf_byte_match_set" "owasp_09_server_side_include_string_set" {
 }
 
 resource "aws_waf_rule" "owasp_09_server_side_include_rule" {
-  depends_on = ["aws_waf_byte_match_set.owasp_09_server_side_include_string_set"]
+  depends_on = [aws_waf_byte_match_set.owasp_09_server_side_include_string_set]
 
   count = lower(var.target_scope) == "global" ? 1 : 0
 
