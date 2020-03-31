@@ -1,11 +1,13 @@
-# terraform-aws-waf-owasp-top-10-rules
-[![Terraform Version](https://img.shields.io/badge/Terraform%20Version->=0.11.14,_<0.12.0-blue.svg)](https://releases.hashicorp.com/terraform/)
-[![Release](https://img.shields.io/github/release/traveloka/terraform-aws-waf-owasp-top-10-rules.svg)](https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/releases)
-[![Last Commit](https://img.shields.io/github/last-commit/traveloka/terraform-aws-waf-owasp-top-10-rules.svg)](https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/commits/master)
-[![Issues](https://img.shields.io/github/issues/traveloka/terraform-aws-waf-owasp-top-10-rules.svg)](https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/traveloka/terraform-aws-waf-owasp-top-10-rules.svg)](https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/pulls)
-[![License](https://img.shields.io/github/license/traveloka/terraform-aws-waf-owasp-top-10-rules.svg)](https://github.com/traveloka/terraform-aws-waf-owasp-top-10-rules/blob/master/LICENSE)
+# Terraform | AWS WAF | OWASP Top 10 vulnerabilities
 
+## IMPORTANT CONSIDERATIONS
+1. The original source was taken from https://github.com/masterpointio/terraform-aws-waf-owasp-top-10-rules and was adapted to the needs of the project at hand.
+
+2. **MODULE USE CASE**
+    * **Global WAF** for CloudFront usage
+    * **Regional WAF** for ALB usage
+
+## Use AWS WAF at terraform to Mitigate OWASP’s Top 10 Web Application Vulnerabilities
 OWASP Top 10 Most Critical Web Application Security Risks is a powerful awareness document for web application security. It represents a broad consensus about the most critical security risks to web applications. Project members include a variety of security experts from around the world who have shared their expertise to produce this list[[1]](https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project). You can read the document that they published here: [[2]](https://www.owasp.org/images/7/72/OWASP_Top_10-2017_%28en%29.pdf.pdf).
 
 This is a Terraform module which creates AWF WAF resources for protection of your resources from the OWASP Top 10 Security Risks. This module is based on the whitepaper that AWS provides. The whitepaper tells how to use AWS WAF to mitigate those attacks[[3]](https://d0.awsstatic.com/whitepapers/Security/aws-waf-owasp.pdf)[[4]](https://aws.amazon.com/about-aws/whats-new/2017/07/use-aws-waf-to-mitigate-owasps-top-10-web-application-vulnerabilities/).
@@ -38,9 +40,6 @@ References
 
 ## Related Modules
 * [terraform-aws-waf-webacl-supporting-resources](https://github.com/traveloka/terraform-aws-waf-webacl-supporting-resources)
-
-## Author
-[Rafi Kurnia Putra](https://github.com/rafikurnia)
 
 ## License
 Apache 2 Licensed. See LICENSE for full details.
