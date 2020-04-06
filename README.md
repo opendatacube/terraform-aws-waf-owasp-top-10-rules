@@ -31,9 +31,77 @@ References
 * [9] : https://github.com/traveloka/terraform-aws-waf-webacl-supporting-resources/tree/master/examples
 
 ## FAQ
-1. **Can I use only some of the rules?** *Yes you can. This module will outputs the rules' ID. Attach to WebACL you created only the IDs of the rules that you want.*
-2. **Can I provision only some of the rules?** *No you can't. If you really want to do it, the only solution is to copy-paste match-sets and rules code manually. You must aware that by doing that you will lose support from maintainer of this module.*
-3. **Can I modify some match-sets of a rule?** *No you can't. The same answer to answer question number 2. But if you found something need to be fixed, e.g. match-sets causing lots of false positive, please don't hesitate to create an issue or a pull request to this repository!*
+1. **Can I use only some of the rules?** 
+- Yes you can. This module will outputs the rules' ID. Attach to WebACL you created only the IDs of the rules that you want.
+2. **Can I provision only some of the rules?** 
+- No you can't. Recommendation is to set rule action type to `COUNT` for testing in order to avoid service affection; when ready, set it to BLOCK.
+3. **Can I modify some match-sets of a rule?** 
+- No you can't. The same answer to answer question number 2. But if you found something need to be fixed, e.g. match-sets causing lots of false positive, please don't hesitate to create an issue or a pull request to this repository!
+- We have enable variables to enable/disable match-sets for `XSS` and `Path Traversal, LFI, RFI`. Check [Inputs](#inputs) section below for more detail.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| owner | The owner of the environment | string |  | yes |
+| namespace | The unique namespace for the environment, which could be your organization name or abbreviation, e.g. 'odc' | string |  | Yes |
+| environment | The name of the environment - e.g. dev, stage | string |  | Yes |
+| waf_prefix | Prefix to use when naming resources | string | `"wafowasp"`  | No |
+| target_scope | Valid values are `global` and `regional`. If `global`, means resources created will be for global targets such as Amazon CloudFront distribution. For regional targets like ALBs and API Gateway stages, set to `regional` | string |  | Yes |
+| create_rule_group | All rules can be grouped into a Rule Group. Unfortunately, AWS WAF Rule Group limit per region is only 3. By setting the value to `false` will not create the rule group | string | `"true"` | No |
+| rule_01_sql_injection_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_02_auth_tokens_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_03_xss_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_04_lfi_rfi_paths_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_06_php_insecure_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_07_size_restriction_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_08_csrf_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+| rule_09_ssi_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
+
+## Optional Inputs:  
+### Variables to adjust size restriction
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| max_expected_uri_size | Maximum number of bytes allowed in the URI component of the HTTP request. Generally the maximum possible value is determined by the server operating system (maps to file system paths), the web server software, or other middleware components. Choose a value that accomodates the largest URI segment you use in practice in your web application | string | `"512"` | No |
+| max_expected_query_string_size | Maximum number of bytes allowed in the query string component of the HTTP request. Normally the  of query string parameters following the ? in a URL is much larger than the URI , but still bounded by the  of the parameters your web application uses and their values | string | `"1024"` | No |
+| max_expected_body_size | Maximum number of bytes allowed in the body of the request. If you do not plan to allow large uploads, set it to the largest payload value that makes sense for your web application. Accepting unnecessarily large values can cause performance issues, if large payloads are used as an attack vector against your web application | string | `"4096"` | No |
+| max_expected_cookie_size | Maximum number of bytes allowed in the cookie header. The maximum size should be less than 4096, the size is determined by the amount of information your web application stores in cookies. If you only pass a session token via cookies, set the size to no larger than the serialized size of the session token and cookie metadata | string | `"4093"` | No |
+| csrf_expected_header | The custom HTTP request header, where the CSRF token value is expected to be encountered | string | `"x-csrf-token"` | No |
+| csrf_expected_size | The size in bytes of the CSRF token value. For example if it's a canonically formatted UUIDv4 value the expected size would be 36 bytes/ASCII characters | string | `"36"` | No |
+
+### Variables to disable XSS and PATH filters
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| disable_03_uri_url_decode | Disable the 'URI contains a cross-site scripting threat after decoding as URL.' filter | bool | `false` | No |
+| disable_03_uri_html_decode | Disable the 'URI contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_03_query_string_url_decode | Disable the 'Query string contains a cross-site scripting threat after decoding as URL.' filter | bool | `false` | No |
+| disable_03_query_string_html_decode | Disable the 'Query string contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_03_body_url_decode | Disable the 'Body contains a cross-site scripting threat after decoding as URL.' filter | bool | `false` | No |
+| disable_03_body_html_decode | Disable the 'Body contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_03_cookie_url_decode | Disable the 'Header cookie contains a cross-site scripting threat after decoding as URL.' filter | bool | `false` | No |
+| disable_03_cookie_html_decode | Disable the 'Header 'cookie' contains a cross-site scripting threat after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_04_uri_contains_previous_dir_after_url_decode | Disable the 'URI contains: '../' after decoding as URL.' filter | bool | `false` | No |
+| disable_04_uri_contains_previous_dir_after_html_decode | Disable the 'URI contains: '../' after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_04_query_string_contains_previous_dir_after_url_decode | Disable the 'Query string contains: '../' after decoding as URL.' filter | bool | `false` | No |
+| disable_04_query_string_contains_previous_dir_after_html_decode | Disable the 'Query string contains: '../' after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_04_uri_contains_url_path_after_url_decode | Disable the 'URI contains: '://' after decoding as URL.' filter | bool | `false` | No |
+| disable_04_uri_contains_url_path_after_html_decode | Disable the 'URI contains: '://' after decoding as HTML tags.' filter | bool | `false` | No |
+| disable_04_query_string_contains_url_path_after_url_decode | Disable the 'Query string contains: '://' after decoding as URL.' filter | bool | `false` | No |
+| disable_04_query_string_contains_url_path_after_html_decode | Disable the 'Query string contains: '://' after decoding as HTML tags.' filter | bool | `false` | No |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| rule_group_id | AWS WAF Rule Group which contains all rules for OWASP Top 10 protection |
+| rule_01_sql_injection_rule_id | AWS WAF Rule which mitigates SQL Injection Attacks |
+| rule_02_auth_token_rule_id | AWS WAF Rule which blacklists bad/hijacked JWT tokens or session IDs |
+| rule_03_xss_rule_id | AWS WAF Rule which mitigates Cross Site Scripting Attacks |
+| rule_04_paths_rule_id | AWS WAF Rule which mitigates Path Traversal, LFI, RFI |
+| rule_06_php_insecure_rule_id | AWS WAF Rule which mitigates PHP Specific Security Misconfigurations |
+| rule_07_size_restriction_rule_id | AWS WAF Rule which mitigates abnormal requests via size restrictions |
+| rule_08_csrf_rule_id | AWS WAF Rule which enforces the presence of CSRF token in request header |
+| rule_09_ssi_rule_id | AWS WAF Rule which blocks request patterns for webroot objects that shouldn't be directly accessible |
 
 ## Examples
 * [owasp-top-10](examples/owasp-top-10)

@@ -10,13 +10,13 @@ resource "random_id" "this" {
   }
 }
 
+## RULES CURRENTLY NOT IMPLEMENTED
 # Regional
 ####################
 ## OWASP Top 10 A5
 ## Privileged Module Access Restrictions
 ## Restrict access to the admin interface to known source IPs only
 ## Matches the URI prefix, when the remote IP isn't in the whitelist
-## CURRENTLY NOT APPLICABLE
 
 ## 10. ## Generic
 ### IP Blacklist
@@ -36,8 +36,8 @@ resource "random_id" "this" {
 ### Matches IP addresses that should not be allowed to access content
 ### CURRENTLY NOT APPLICABLE
 
-## RuleGroup
 
+## Regional - RuleGroup
 resource "aws_wafregional_rule_group" "owasp_top_10" {
   depends_on = [
     "aws_wafregional_rule.owasp_01_sql_injection_rule",
@@ -136,8 +136,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
   }
 }
 
-## RuleGroup
-
+## Global - RuleGroup
 resource "aws_waf_rule_group" "owasp_top_10" {
   depends_on = [
     "aws_waf_rule.owasp_01_sql_injection_rule",
@@ -217,7 +216,7 @@ resource "aws_waf_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = var.rule_07_size_restriction_action_type
+      type = var.rule_08_csrf_action_type
     }
 
     priority = "7"
