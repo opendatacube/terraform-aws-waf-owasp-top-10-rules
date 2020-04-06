@@ -13,7 +13,7 @@ variable "environment" {
   type = string
 }
 
-variable waf_prefix {
+variable "waf_prefix" {
   default = "wafowasp"
   description = "Prefix to use when naming resources"
 }
