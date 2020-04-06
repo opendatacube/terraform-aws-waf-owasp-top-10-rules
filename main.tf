@@ -780,10 +780,10 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_03_xss_action_type
     }
 
-    priority = var.rule_03_xss_action_type
+    priority = "4"
     rule_id  = aws_wafregional_rule.owasp_03_xss_rule.0.id
     type     = "REGULAR"
   }
