@@ -750,7 +750,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_07_size_restriction_action_type
     }
 
     priority = "1"
@@ -760,7 +760,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_02_auth_tokens_action_type
     }
 
     priority = "2"
@@ -770,7 +770,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_01_sql_injection_action_type
     }
 
     priority = "3"
@@ -783,14 +783,14 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
       type = "BLOCK"
     }
 
-    priority = "4"
+    priority = var.rule_03_xss_action_type
     rule_id  = aws_wafregional_rule.owasp_03_xss_rule.0.id
     type     = "REGULAR"
   }
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_04_lfi_rfi_paths_action_type
     }
 
     priority = "5"
@@ -800,7 +800,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_06_php_insecure_action_type
     }
 
     priority = "6"
@@ -810,7 +810,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_08_csrf_action_type
     }
 
     priority = "7"
@@ -820,7 +820,7 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 
   activated_rule {
     action {
-      type = "BLOCK"
+      type = var.rule_09_ssi_action_type
     }
 
     priority = "8"
