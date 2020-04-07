@@ -124,69 +124,93 @@ resource "aws_waf_xss_match_set" "owasp_03_xss_set" {
 
   name = "${lower(var.waf_prefix)}-owasp-03-detect-xss-${random_id.this.0.hex}"
 
-  xss_match_tuples {
-    text_transformation = "URL_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_uri_url_decode ? [] : [1]
+    content {
+      text_transformation = "URL_DECODE"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "HTML_ENTITY_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_uri_html_decode ? [] : [1]
+    content {
+      text_transformation = "HTML_ENTITY_DECODE"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "URL_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_query_string_url_decode ? [] : [1]
+    content {
+      text_transformation = "URL_DECODE"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "HTML_ENTITY_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_query_string_html_decode ? [] : [1]
+    content {
+      text_transformation = "HTML_ENTITY_DECODE"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "URL_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_body_url_decode ? [] : [1]
+    content {
+      text_transformation = "URL_DECODE"
 
-    field_to_match {
-      type = "BODY"
+      field_to_match {
+        type = "BODY"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "HTML_ENTITY_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_body_html_decode ? [] : [1]
+    content {
+      text_transformation = "HTML_ENTITY_DECODE"
 
-    field_to_match {
-      type = "BODY"
+      field_to_match {
+        type = "BODY"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "URL_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_cookie_url_decode ? [] : [1]
+    content {
+      text_transformation = "URL_DECODE"
 
-    field_to_match {
-      type = "HEADER"
-      data = "cookie"
+      field_to_match {
+        type = "HEADER"
+        data = "cookie"
+      }
     }
   }
 
-  xss_match_tuples {
-    text_transformation = "HTML_ENTITY_DECODE"
+  dynamic "xss_match_tuples" {
+    for_each = var.disable_03_cookie_html_decode ? [] : [1]
+    content {
+      text_transformation = "HTML_ENTITY_DECODE"
 
-    field_to_match {
-      type = "HEADER"
-      data = "cookie"
+      field_to_match {
+        type = "HEADER"
+        data = "cookie"
+      }
     }
   }
 }

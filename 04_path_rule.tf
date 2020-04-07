@@ -8,83 +8,107 @@ resource "aws_wafregional_byte_match_set" "owasp_04_paths_string_set" {
 
   name = "${lower(var.waf_prefix)}-owasp-04-match-rfi-lfi-traversal-${random_id.this.0.hex}"
 
-  byte_match_tuples {
-    text_transformation   = "URL_DECODE"
-    target_string         = "../"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_uri_contains_previous_dir_after_url_decode ? [] : [1]
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = "../"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "HTML_ENTITY_DECODE"
-    target_string         = "../"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_uri_contains_previous_dir_after_html_decode ? [] : [1]
+    content {
+      text_transformation   = "HTML_ENTITY_DECODE"
+      target_string         = "../"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "URL_DECODE"
-    target_string         = "../"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_query_string_contains_previous_dir_after_url_decode ? [] : [1]
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = "../"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "HTML_ENTITY_DECODE"
-    target_string         = "../"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_query_string_contains_previous_dir_after_html_decode ? [] : [1]
+    content {
+      text_transformation   = "HTML_ENTITY_DECODE"
+      target_string         = "../"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "URL_DECODE"
-    target_string         = "://"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_uri_contains_url_path_after_url_decode ? [] : [1]
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = "://"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "HTML_ENTITY_DECODE"
-    target_string         = "://"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_uri_contains_url_path_after_html_decode ? [] : [1]
+    content {
+      text_transformation   = "HTML_ENTITY_DECODE"
+      target_string         = "://"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "URI"
+      field_to_match {
+        type = "URI"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "URL_DECODE"
-    target_string         = "://"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_query_string_contains_url_path_after_url_decode ? [] : [1]
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = "://"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 
-  byte_match_tuples {
-    text_transformation   = "HTML_ENTITY_DECODE"
-    target_string         = "://"
-    positional_constraint = "CONTAINS"
+  dynamic "byte_match_tuples" {
+    for_each = var.disable_04_query_string_contains_url_path_after_html_decode ? [] : [1]
+    content {
+      text_transformation   = "HTML_ENTITY_DECODE"
+      target_string         = "://"
+      positional_constraint = "CONTAINS"
 
-    field_to_match {
-      type = "QUERY_STRING"
+      field_to_match {
+        type = "QUERY_STRING"
+      }
     }
   }
 }
