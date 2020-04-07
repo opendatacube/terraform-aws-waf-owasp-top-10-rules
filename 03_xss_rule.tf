@@ -100,7 +100,7 @@ resource "aws_wafregional_xss_match_set" "owasp_03_xss_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_03_xss_rule" {
-  depends_on = [aws_wafregional_xss_match_set.owasp_03_xss_set]
+  depends_on = [aws_wafregional_xss_match_set.owasp_03_xss_set, aws_wafregional_byte_match_set.url_whitelist_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -111,6 +111,12 @@ resource "aws_wafregional_rule" "owasp_03_xss_rule" {
     data_id = aws_wafregional_xss_match_set.owasp_03_xss_set.0.id
     negated = "false"
     type    = "XssMatch"
+  }
+
+  predicate {
+    data_id = aws_wafregional_byte_match_set.url_whitelist_string_set.0.id
+    negated = "true"
+    type    = "ByteMatch"
   }
 }
 

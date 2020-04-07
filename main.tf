@@ -36,6 +36,42 @@ resource "random_id" "this" {
 ### Matches IP addresses that should not be allowed to access content
 ### CURRENTLY NOT APPLICABLE
 
+## Generic
+### URL whitelist - `Regional` WAF
+### Matches header HOST and uri prefix to be allowed
+### To resolve false postivie for XSS and SQL Injection
+resource "aws_wafregional_byte_match_set" "url_whitelist_string_set" {
+  count = lower(var.target_scope) == "regional" ? 1 : 0
+
+  name = "${lower(var.waf_prefix)}-match-url-whitelist-${random_id.this.0.hex}"
+
+  dynamic "byte_match_tuples" {
+    for_each = var.enable_url_whitelist_string_match_set && lower(var.url_whitelist_url_host) != "" ? [1] : []
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = var.url_whitelist_uri_prefix
+      positional_constraint = "STARTS_WITH"
+
+      field_to_match {
+        type = "URI"
+      }
+    }
+  }
+
+  dynamic "byte_match_tuples" {
+    for_each = var.enable_url_whitelist_string_match_set && lower(var.url_whitelist_url_host) != "" ? [1] : []
+    content {
+      text_transformation   = "URL_DECODE"
+      target_string         = var.url_whitelist_url_host
+      positional_constraint = "CONTAINS"
+
+      field_to_match {
+        type = "HEADER"
+        data = "host"
+      }
+    }
+  }
+}
 
 ## Regional - RuleGroup
 resource "aws_wafregional_rule_group" "owasp_top_10" {

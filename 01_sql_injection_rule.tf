@@ -76,7 +76,7 @@ resource "aws_wafregional_sql_injection_match_set" "owasp_01_sql_injection_set" 
 }
 
 resource "aws_wafregional_rule" "owasp_01_sql_injection_rule" {
-  depends_on = [aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set]
+  depends_on = [aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set, aws_wafregional_byte_match_set.url_whitelist_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -87,6 +87,12 @@ resource "aws_wafregional_rule" "owasp_01_sql_injection_rule" {
     data_id = aws_wafregional_sql_injection_match_set.owasp_01_sql_injection_set.0.id
     negated = "false"
     type    = "SqlInjectionMatch"
+  }
+
+  predicate {
+    data_id = aws_wafregional_byte_match_set.url_whitelist_string_set.0.id
+    negated = "true"
+    type    = "ByteMatch"
   }
 }
 

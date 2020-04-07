@@ -59,6 +59,7 @@ References
 | rule_09_ssi_action_type | Rule action type. Either BLOCK, ALLOW, or COUNT (useful for testing) | string | `"BLOCK"` | No |
 
 ## Optional Inputs:  
+
 ### Variables to adjust size restriction
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
@@ -88,6 +89,13 @@ References
 | disable_04_uri_contains_url_path_after_html_decode | Disable the 'URI contains: '://' after decoding as HTML tags.' filter | bool | `false` | No |
 | disable_04_query_string_contains_url_path_after_url_decode | Disable the 'Query string contains: '://' after decoding as URL.' filter | bool | `false` | No |
 | disable_04_query_string_contains_url_path_after_html_decode | Disable the 'Query string contains: '://' after decoding as HTML tags.' filter | bool | `false` | No |
+
+### Variables to enable URL whitelist
+| Name | Description | Type | Default | Required |
+|------|-------------|:----:|:-----:|:-----:|
+| enable_url_whitelist_string_match_set | Enable the 'URL whitelisting' filter. If enabled, provide values for `url_whitelist_uri_prefix` and `url_whitelist_url_host` | bool | `false` | No |
+| url_whitelist_uri_prefix | URI prefix for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true` | string | `""` | Yes |
+| url_whitelist_url_host | Host for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true` | string | `""` | Yes |
 
 ## Outputs
 

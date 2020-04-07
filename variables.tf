@@ -200,3 +200,21 @@ variable "disable_04_query_string_contains_url_path_after_html_decode" {
   type        = bool
   description = "Disable the 'Query string contains: '://' after decoding as HTML tags.' filter"
 }
+
+variable "enable_url_whitelist_string_match_set" {
+  default     = false
+  type        = bool
+  description = "Enable the 'URL whitelisting' filter. If enabled, provide values for `url_whitelist_uri_prefix` and `url_whitelist_url_host`"
+}
+
+variable "url_whitelist_uri_prefix" {
+  default     = ""
+  type        = string
+  description = "URI prefix for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
+
+variable "url_whitelist_url_host" {
+  default     = ""
+  type        = string
+  description = "Host for URL whitelisting. Required if `enable_url_whitelist_string_match_set` is set to `true`"
+}
