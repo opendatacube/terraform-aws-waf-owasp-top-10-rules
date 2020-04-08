@@ -28,6 +28,11 @@ module "owasp_top_10_rules" {
   rule_08_csrf_action_type             = "BLOCK"
   rule_09_ssi_action_type              = "BLOCK"
 
+  # NOTE: variables to setup URL whitelisting string match filter
+  enable_url_whitelist_string_match_set = true
+  url_whitelist_uri_prefix              = "/uri/prefix/to/match"
+  url_whitelist_url_host                = "example.domain.com"  # HOST to match
+
   # NOTE: variables to manage cross-site scripting filters. Deafult is set to `false`.
   disable_03_uri_url_decode           = false
   disable_03_uri_html_decode          = false
