@@ -114,7 +114,7 @@ resource "aws_wafregional_byte_match_set" "owasp_04_paths_string_set" {
 }
 
 resource "aws_wafregional_rule" "owasp_04_paths_rule" {
-  depends_on = [aws_wafregional_byte_match_set.owasp_04_paths_string_set]
+  depends_on = [aws_wafregional_byte_match_set.owasp_04_paths_string_set, aws_wafregional_byte_match_set.url_whitelist_string_set]
 
   count = lower(var.target_scope) == "regional" ? 1 : 0
 
@@ -124,6 +124,12 @@ resource "aws_wafregional_rule" "owasp_04_paths_rule" {
   predicate {
     data_id = aws_wafregional_byte_match_set.owasp_04_paths_string_set.0.id
     negated = "false"
+    type    = "ByteMatch"
+  }
+
+  predicate {
+    data_id = aws_wafregional_byte_match_set.url_whitelist_string_set.0.id
+    negated = "true"
     type    = "ByteMatch"
   }
 }
