@@ -76,14 +76,14 @@ resource "aws_wafregional_byte_match_set" "url_whitelist_string_set" {
 ## Regional - RuleGroup
 resource "aws_wafregional_rule_group" "owasp_top_10" {
   depends_on = [
-    "aws_wafregional_rule.owasp_01_sql_injection_rule",
-    "aws_wafregional_rule.owasp_02_auth_token_rule",
-    "aws_wafregional_rule.owasp_03_xss_rule",
-    "aws_wafregional_rule.owasp_04_paths_rule",
-    "aws_wafregional_rule.owasp_06_php_insecure_rule",
-    "aws_wafregional_rule.owasp_07_size_restriction_rule",
-    "aws_wafregional_rule.owasp_08_csrf_rule",
-    "aws_wafregional_rule.owasp_09_server_side_include_rule",
+    aws_wafregional_rule.owasp_01_sql_injection_rule,
+    aws_wafregional_rule.owasp_02_auth_token_rule,
+    aws_wafregional_rule.owasp_03_xss_rule,
+    aws_wafregional_rule.owasp_04_paths_rule,
+    aws_wafregional_rule.owasp_06_php_insecure_rule,
+    aws_wafregional_rule.owasp_07_size_restriction_rule,
+    aws_wafregional_rule.owasp_08_csrf_rule,
+    aws_wafregional_rule.owasp_09_server_side_include_rule,
   ]
 
   count = lower(var.create_rule_group) && lower(var.target_scope) == "regional" ? 1 : 0
@@ -175,14 +175,14 @@ resource "aws_wafregional_rule_group" "owasp_top_10" {
 ## Global - RuleGroup
 resource "aws_waf_rule_group" "owasp_top_10" {
   depends_on = [
-    "aws_waf_rule.owasp_01_sql_injection_rule",
-    "aws_waf_rule.owasp_02_auth_token_rule",
-    "aws_waf_rule.owasp_03_xss_rule",
-    "aws_waf_rule.owasp_04_paths_rule",
-    "aws_waf_rule.owasp_06_php_insecure_rule",
-    "aws_waf_rule.owasp_07_size_restriction_rule",
-    "aws_waf_rule.owasp_08_csrf_rule",
-    "aws_waf_rule.owasp_09_server_side_include_rule",
+    aws_waf_rule.owasp_01_sql_injection_rule,
+    aws_waf_rule.owasp_02_auth_token_rule,
+    aws_waf_rule.owasp_03_xss_rule,
+    aws_waf_rule.owasp_04_paths_rule,
+    aws_waf_rule.owasp_06_php_insecure_rule,
+    aws_waf_rule.owasp_07_size_restriction_rule,
+    aws_waf_rule.owasp_08_csrf_rule,
+    aws_waf_rule.owasp_09_server_side_include_rule,
   ]
 
   count = lower(var.create_rule_group) && lower(var.target_scope) == "global" ? 1 : 0
